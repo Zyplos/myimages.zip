@@ -1,0 +1,55 @@
+.navbar,
+.toolbar {
+  display: flex;
+}
+
+.toolbar > button {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  background: #fff;
+  border: 1px solid transparent;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #e5f3ff;
+    border: 1px solid #cce8ff;
+  }
+}
+
+.icon-toolbar-wrapper {
+  background-color: #f0f0f0;
+
+  & .divider {
+    & > div {
+      width: 100%;
+      height: 1px;
+    }
+    & > div:nth-child(1) {
+      background-color: #a0a0a0;
+    }
+    & > div:nth-child(2) {
+      background-color: #ffffff;
+    }
+  }
+}
+
+.icon-toolbar {
+  display: flex;
+  padding-bottom: 0.5rem;
+
+  & > button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #d8e6f2;
+      border: 1px solid #c0dcf3;
+    }
+  }
+}

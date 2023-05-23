@@ -1,0 +1,62 @@
+.breadcrumbs-wrapper {
+  display: flex;
+  align-items: stretch;
+}
+
+.up-button-wrapper {
+  border-width: 2px;
+  border-style: solid;
+  border-top-color: #fff;
+  border-left-color: #fff;
+  border-right-color: #b4b4b4;
+  border-bottom-color: #dcdcdc;
+
+  padding-left: 0.1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  padding-right: 0.6rem;
+}
+
+.up-button {
+  background: none;
+  border: 1px solid transparent;
+  padding: 0.2rem;
+
+  &:hover {
+    cursor: pointer;
+    border: 1px solid #cce8ff;
+    background: #e5f3ff;
+  }
+
+  // https://stackoverflow.com/questions/5804256/image-inside-div-has-extra-space-below-the-image
+  & > img {
+    display: block;
+  }
+}
+
+.breadcrumbs-list-wrapper {
+  border: 1px solid #7a7a7a;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  margin-left: 1px;
+
+  & > img {
+    margin-left: 0.2rem;
+    margin-right: 0.4rem;
+  }
+}
+
+.breadcrumbs-list > button {
+  background: none;
+  border: 1px solid transparent;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-azeret-mono), monospace;
+
+  &:hover {
+    cursor: pointer;
+    border: 1px solid #cce8ff;
+    background: #e5f3ff;
+  }
+}
