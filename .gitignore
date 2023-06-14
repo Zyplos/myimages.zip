@@ -2,6 +2,8 @@
 /_filespace
 /_filespace_original
 /public/images/_filespace
+/.vscode
+/internals/FINAL_DATA.json
 
 # dependencies
 /node_modules
