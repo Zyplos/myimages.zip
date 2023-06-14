@@ -20,6 +20,7 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "exiftool-vendored": "^22.0.0",
     "sass": "^1.62.1"
   }
 }
