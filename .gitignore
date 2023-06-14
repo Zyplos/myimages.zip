@@ -1,4 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+/_filespace
+/_filespace_original
+/public/images/_filespace
 
 # dependencies
 /node_modules
