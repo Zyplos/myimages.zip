@@ -1,0 +1,154 @@
+// https://adamlynch.com/flexible-data-tables-with-css-grid/
+
+.table {
+  display: grid;
+  border-collapse: collapse;
+  min-width: 100%;
+  /* These are just initial values which are overriden using JavaScript when a column is resized */
+  grid-template-columns: minmax(150px, 2fr) minmax(150px, 1fr) minmax(150px, 1.67fr) minmax(150px, 1.67fr);
+  font-size: 0.9rem;
+
+  position: relative;
+
+  margin-bottom: 0.5rem;
+}
+
+.table thead {
+  position: sticky;
+  top: 0;
+}
+
+.table thead,
+.table tbody,
+.table tr {
+  display: contents;
+}
+
+.table th,
+.table td {
+  padding: 0.4rem;
+  padding-left: 0.6rem;
+  // padding-bottom: 0.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  font-weight: normal;
+  position: relative;
+
+  border-right: 1px solid #e5e5e5;
+}
+
+.table th:hover {
+  background: #d9ebf9;
+}
+
+.table th:last-child {
+  border: 0;
+}
+
+.table td:nth-child(2),
+.table th:nth-child(2) {
+  text-align: right;
+}
+
+.resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #e5e5e5;
+  opacity: 0;
+  width: 2px;
+  cursor: col-resize;
+}
+
+.resize-handle:hover,
+/* The following selector is needed so the handle is visible during resize even if the mouse isn't over the handle anymore */
+.header--being-resized .resize-handle {
+  opacity: 0.5;
+}
+
+.table th:hover .resize-handle {
+  opacity: 0.3;
+}
+
+.table td {
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+
+  & img {
+    vertical-align: sub;
+    margin-right: 0.1rem;
+  }
+}
+
+.table button {
+  color: #000;
+  text-decoration: none;
+  padding: 0 0.2rem;
+  padding-left: 0;
+  background: none;
+  border: none;
+
+  // display: contents;
+
+  // display: flex;
+  // gap: 0.2rem;
+  margin-left: 0.1rem;
+
+  & span {
+    border: 1px solid transparent;
+    padding: 0 0.1rem;
+  }
+
+  &:focus span {
+    background-color: #0078d7;
+    color: #fff;
+  }
+}
+
+// .table button:focus {
+//   background-color: #0078d7;
+//   color: #fff;
+// }
+
+.active-border {
+  border: 1px dotted #000 !important;
+}
+
+.footer-toolbar {
+  font-size: 0.9rem;
+  background-color: #f0f0f0;
+  height: 1.8rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  border-top: 1px solid #d7d7d7;
+
+  & span {
+    border-right: 1px solid #d7d7d7;
+    padding-left: 0.4rem;
+    padding-right: 4rem;
+    min-width: 150px;
+  }
+
+  & span:nth-child(1) {
+    padding-right: 8rem;
+  }
+
+  & span:last-child {
+    border-right: 0;
+    padding-right: 0;
+  }
+}
