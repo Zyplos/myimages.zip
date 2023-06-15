@@ -4,6 +4,8 @@
 /public/images/_filespace
 /.vscode
 /internals/FINAL_DATA.json
+FINAL_DATA.json
+EXTRA_DATA.json
 
 # dependencies
 /node_modules
