@@ -30,7 +30,7 @@ const columnTypeToRatioMap: { [key: string]: number } = {
 function grabBytesDataFromDOM(span: HTMLSpanElement) {
   const td = span.parentElement?.parentElement?.parentElement?.children[1];
   if (!td) return null;
-  return td.textContent;
+  return td.textContent || "\u2800";
 }
 // same thing as grabBytesDataFromDOM but returns the modified date instead
 function grabModifiedDateFromDOM(span: HTMLSpanElement) {
@@ -55,16 +55,17 @@ function TypedIcon({ type }: { type: string }) {
 }
 
 function CorrectLink({ item, currentPath }: { item: ItemData; currentPath: string }) {
+  const isIndex = currentPath == "/";
   const router = useRouter();
   if (item.type === "directory") {
     return (
       <>
         <button
-          onDoubleClick={() => router.push(currentPath + `/${item.name}`)}
+          onDoubleClick={() => router.push((isIndex ? "" : currentPath) + `/${item.name}`)}
           onKeyUp={(e) => {
             // if key is enter or numpad enter
             if (e.key === "Enter" || e.key === "NumpadEnter") {
-              router.push(currentPath + `/${item.name}`);
+              router.push((isIndex ? "" : currentPath) + `/${item.name}`);
             }
           }}
         >
@@ -311,8 +312,8 @@ export default function FileExplorer() {
         <span>
           {currentlySelected ? 1 : 0} / {rootcontents.length} object(s) selected
         </span>
-        <span>{currentlySelected ? grabBytesDataFromDOM(currentlySelected) : ""}</span>
-        <span>{currentlySelected ? grabBytesDataFromDOM(currentlySelected) : ""}</span>
+        <span>{currentlySelected ? grabBytesDataFromDOM(currentlySelected) : "\t"}</span>
+        <span>{currentlySelected ? grabBytesDataFromDOM(currentlySelected) : "\t"}</span>
         <span>{currentlySelected ? grabModifiedDateFromDOM(currentlySelected) : ""}</span>
       </footer>
     </>
