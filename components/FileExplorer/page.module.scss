@@ -70,6 +70,12 @@
   cursor: col-resize;
 }
 
+@media (max-width: 800px) {
+  .resize-handle {
+    width: 50px;
+  }
+}
+
 .resize-handle:hover,
 /* The following selector is needed so the handle is visible during resize even if the mouse isn't over the handle anymore */
 .header--being-resized .resize-handle {
@@ -142,7 +148,6 @@
   bottom: 0;
   width: 100%;
   max-width: 100%;
-  overflow: scroll;
 
   display: flex;
   align-items: center;

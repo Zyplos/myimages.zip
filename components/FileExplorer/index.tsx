@@ -57,11 +57,22 @@ function TypedIcon({ type }: { type: string }) {
 function CorrectLink({ item, currentPath }: { item: ItemData; currentPath: string }) {
   const isIndex = currentPath == "/";
   const router = useRouter();
+  // a TODO that would be nice if completed:
+  // the onTouchStart's used to be onClick's but that wouldn't be reliable for things like tablets
+  // but now scrolling is annoying on mobile
+  // you can't use onClick because it needs to be on double click
+  // so onTouchStart has to work but also allow scrolling
+
   if (item.type === "directory") {
     return (
       <>
         <button
           onDoubleClick={() => router.push((isIndex ? "" : currentPath) + `/${item.name}`)}
+          onTouchStart={() => {
+            // allow on click only on devices with a width of 800px or less
+            // if (window.innerWidth > 800) return;
+            router.push((isIndex ? "" : currentPath) + `/${item.name}`);
+          }}
           onKeyUp={(e) => {
             // if key is enter or numpad enter
             if (e.key === "Enter" || e.key === "NumpadEnter") {
@@ -79,6 +90,11 @@ function CorrectLink({ item, currentPath }: { item: ItemData; currentPath: strin
       <>
         <button
           onDoubleClick={() => window.open(item.url)}
+          onTouchStart={() => {
+            // allow on click only on devices with a width of 800px or less
+            // if (window.innerWidth > 800) return;
+            window.open(item.url);
+          }}
           onKeyUp={(e) => {
             // if key is enter or numpad enter
             if (e.key === "Enter" || e.key === "NumpadEnter") {
@@ -98,6 +114,11 @@ function CorrectLink({ item, currentPath }: { item: ItemData; currentPath: strin
       <>
         <button
           onDoubleClick={() => window.open(`/images/_filespace${currentPath}/${item.name}.${item.type}`)}
+          onTouchStart={() => {
+            // allow on click only on devices with a width of 800px or less
+            // if (window.innerWidth > 800) return;
+            window.open(`/images/_filespace${currentPath}/${item.name}.${item.type}`);
+          }}
           onKeyUp={(e) => {
             // if key is enter or numpad enter
             if (e.key === "Enter" || e.key === "NumpadEnter") {
@@ -138,20 +159,32 @@ export default function FileExplorer() {
     const columns: Column[] = [];
     let headerBeingResized: HTMLElement | null;
 
-    const onMouseMove = (e: MouseEvent) =>
+    const onMouseMove = (e: MouseEvent | TouchEvent) => {
+      if (e instanceof TouchEvent) {
+        e.preventDefault();
+      }
+
       requestAnimationFrame(() => {
         console.log("onMouseMove");
 
         if (!headerBeingResized) return;
 
         const horizontalScrollOffset = document.documentElement.scrollLeft;
-        const width = horizontalScrollOffset + e.clientX - headerBeingResized!.offsetLeft;
+
+        let clientX;
+        if (e instanceof MouseEvent) {
+          clientX = e.clientX;
+        } else {
+          clientX = e.touches[0].clientX;
+        }
+
+        const width = horizontalScrollOffset + clientX - headerBeingResized!.offsetLeft;
 
         const column = columns.find(({ header }) => header === headerBeingResized);
         if (column) {
           column.size = Math.max(min, width) + "px";
         }
-        console.log("]]]]]]]]]]COLUMNS CHANGED", columns);
+
         try {
           // save columns data to localstorage, but only the size property
           localStorage.setItem("columns", JSON.stringify(columns.map(({ size }) => size)));
@@ -167,24 +200,35 @@ export default function FileExplorer() {
         console.log("CONSTRUCTED_STYLE_STRING", CONSTRUCTED_STYLE_STRING);
         table.style.gridTemplateColumns = CONSTRUCTED_STYLE_STRING;
       });
+    };
 
     const onMouseUp = () => {
       console.log("onMouseUp");
 
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
+
+      // DEV TOUCH EVENTS
+      window.removeEventListener("touchmove", onMouseMove);
+      window.removeEventListener("touchend", onMouseUp);
+
       if (headerBeingResized) {
         headerBeingResized.classList.remove("header--being-resized");
       }
       headerBeingResized = null;
     };
 
-    const initResize = ({ target }: MouseEvent) => {
+    const initResize = ({ target }: MouseEvent | TouchEvent) => {
       console.log("initResize");
 
       headerBeingResized = (target as HTMLSpanElement).parentNode as HTMLElement;
       window.addEventListener("mousemove", onMouseMove);
       window.addEventListener("mouseup", onMouseUp);
+
+      // DEV TOUCH EVENTS
+      window.addEventListener("touchmove", onMouseMove);
+      window.addEventListener("touchend", onMouseUp);
+
       if (headerBeingResized) {
         headerBeingResized.classList.add("header--being-resized");
       }
@@ -204,6 +248,9 @@ export default function FileExplorer() {
 
       const resizeHandle = header.querySelector(".resize-handle") as HTMLElement;
       resizeHandle.addEventListener("mousedown", initResize);
+
+      // DEV TOUCH EVENTS
+      resizeHandle.addEventListener("touchstart", initResize);
     });
 
     // ===== SET LAST FOCUSED LINK
@@ -230,9 +277,17 @@ export default function FileExplorer() {
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
+
+      // DEV TOUCH EVENTS
+      window.removeEventListener("touchmove", onMouseMove);
+      window.removeEventListener("touchend", onMouseUp);
+
       columns.forEach(({ header }) => {
         const resizeHandle = header.querySelector(".resize-handle") as HTMLElement;
         resizeHandle.removeEventListener("mousedown", initResize);
+
+        // DEV TOUCH EVENTS
+        resizeHandle.removeEventListener("touchstart", initResize);
       });
 
       document.querySelectorAll("td button span").forEach((link) => {
