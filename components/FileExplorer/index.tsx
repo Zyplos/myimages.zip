@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "./page.module.scss";
 import { usePathname } from "next/navigation";
 import { ItemData, convertDateFormat, formatIntegerWithSpaces, getDirectoryContents } from "@/internals/utils";
-import { useRouter } from "next/navigation";
+import { useRouter, notFound } from "next/navigation";
 import Image from "next/image";
 import Loader from "@/components/Loader";
 
@@ -162,10 +162,6 @@ export default function FileExplorer() {
     let headerBeingResized: HTMLElement | null;
 
     const onMouseMove = (e: MouseEvent | TouchEvent) => {
-      if (e instanceof TouchEvent) {
-        e.preventDefault();
-      }
-
       requestAnimationFrame(() => {
         console.log("onMouseMove");
 
@@ -303,8 +299,12 @@ export default function FileExplorer() {
   // remove beginning slash
   const pathFixed = pathname.substring(1);
 
-  const rootcontents = getDirectoryContents(pathFixed);
-  console.log(rootcontents);
+  let rootcontents: ItemData[] = [];
+  try {
+    rootcontents = getDirectoryContents(pathFixed);
+  } catch (error) {
+    notFound();
+  }
 
   // sort by directory first, then by name
   rootcontents.sort((a, b) => {
