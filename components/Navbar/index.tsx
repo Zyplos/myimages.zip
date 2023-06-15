@@ -19,31 +19,31 @@ export default function Navbar() {
         </div>
         <div className={styles["icon-toolbar"]}>
           <button>
-            <Image src="/images/icons/add-icon.svg" width="48" height="48" alt="Test Icon" />
+            <Image src="/icons/add-icon.svg" width="48" height="48" alt="Add Icon" />
             <span>Add</span>
           </button>
           <button>
-            <Image src="/images/icons/extract-icon.svg" width="48" height="48" alt="Test Icon" />
+            <Image src="/icons/extract-icon.svg" width="48" height="48" alt="Extract Icon" />
             <span>Extract</span>
           </button>
           <button>
-            <Image src="/images/icons/test-icon.svg" width="48" height="48" alt="Test Icon" />
+            <Image src="/icons/test-icon.svg" width="48" height="48" alt="Test Icon" />
             <span>Test</span>
           </button>
           <button>
-            <Image src="/images/icons/copy-icon.svg" width="48" height="48" alt="Test Icon" />
+            <Image src="/icons/copy-icon.svg" width="48" height="48" alt="Copy Icon" />
             <span>Copy</span>
           </button>
           <button>
-            <Image src="/images/icons/move-icon.svg" width="48" height="48" alt="Test Icon" />
+            <Image src="/icons/move-icon.svg" width="48" height="48" alt="Move Icon" />
             <span>Move</span>
           </button>
           <button>
-            <Image src="/images/icons/delete-icon.svg" width="48" height="48" alt="Test Icon" />
+            <Image src="/icons/delete-icon.svg" width="48" height="48" alt="Delete Icon" />
             <span>Delete</span>
           </button>
           <button>
-            <Image src="/images/icons/info-icon.svg" width="48" height="48" alt="Test Icon" />
+            <Image src="/icons/info-icon.svg" width="48" height="48" alt="Info Icon" />
             <span>Info</span>
           </button>
         </div>

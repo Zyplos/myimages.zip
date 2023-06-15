@@ -51,7 +51,7 @@ const typeToIconMap: { [key: string]: string } = {
 };
 
 function TypedIcon({ type }: { type: string }) {
-  return <Image src={`/images/icons/${typeToIconMap[type] || "defaultfile"}-icon.svg`} width="16" height="16" alt="Test Icon" />;
+  return <Image src={`/icons/${typeToIconMap[type] || "defaultfile"}-icon.svg`} width="16" height="16" alt="File Icon" />;
 }
 
 function CorrectLink({ item, currentPath }: { item: ItemData; currentPath: string }) {
@@ -113,16 +113,18 @@ function CorrectLink({ item, currentPath }: { item: ItemData; currentPath: strin
     return (
       <>
         <button
-          onDoubleClick={() => window.open(`/images/_filespace${currentPath}/${item.name}.${item.type}`)}
+          onDoubleClick={() => {
+            window.open((isIndex ? "" : currentPath) + `/${item.name}.${item.type}`);
+          }}
           onTouchStart={() => {
             // allow on click only on devices with a width of 800px or less
             // if (window.innerWidth > 800) return;
-            window.open(`/images/_filespace${currentPath}/${item.name}.${item.type}`);
+            window.open((isIndex ? "" : currentPath) + `/${item.name}.${item.type}`);
           }}
           onKeyUp={(e) => {
             // if key is enter or numpad enter
             if (e.key === "Enter" || e.key === "NumpadEnter") {
-              window.open(`/images/_filespace${currentPath}/${item.name}.${item.type}`);
+              window.open((isIndex ? "" : currentPath) + `/${item.name}.${item.type}`);
             }
           }}
         >
