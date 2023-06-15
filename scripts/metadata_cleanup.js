@@ -35,7 +35,7 @@ async function exiftoolProcess(filePath) {
   }
 }
 
-const directoryPath = "C:\\devspace\\frontend\\myimages.zip\\public\\images\\_filespace";
+const directoryPath = "C:\\devspace\\frontend\\myimages.zip\\public";
 const extensionsSet = new Set();
 
 // function readFilesSync(directory) {

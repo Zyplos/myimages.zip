@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const directoryPath = "C:\\devspace\\frontend\\myimages.zip\\public\\images\\_filespace";
+const directoryPath = "C:\\devspace\\frontend\\myimages.zip\\public";
 
 function getDirectoryContents(directoryPath) {
   const stats = fs.statSync(directoryPath);
