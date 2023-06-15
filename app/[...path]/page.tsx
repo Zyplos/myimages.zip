@@ -4,13 +4,19 @@ import { useEffect, useState } from "react";
 import styles from "./page.module.scss";
 import { usePathname } from "next/navigation";
 import { ItemData, convertDateFormat, formatIntegerWithSpaces, getDirectoryContents } from "@/internals/utils";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Loader from "@/components/Loader";
 
 interface Column {
   header: HTMLTableCellElement;
   size: string;
+}
+
+interface ColumnSizeData {
+  header: string;
+  size: string;
+  type: "numeric" | "text-short" | "text-long";
 }
 
 const min = 150;
@@ -108,13 +114,25 @@ function CorrectLink({ item, currentPath }: { item: ItemData; currentPath: strin
   }
 }
 
+function getColumnSizesFromLocalStorage(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem("columns") || "[]");
+  } catch (error) {
+    console.error("couldnt parse localstorage", error);
+    return [];
+  }
+}
+
 export default function FolderPage() {
   const [currentlySelected, setCurrentlySelected] = useState<HTMLButtonElement | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // https://adamlynch.com/flexible-data-tables-with-css-grid/
     const table = document.querySelector("table");
     if (!table) return;
+
+    let localColumnData = getColumnSizesFromLocalStorage();
 
     const columns: Column[] = [];
     let headerBeingResized: HTMLElement | null;
@@ -123,6 +141,8 @@ export default function FolderPage() {
       requestAnimationFrame(() => {
         console.log("onMouseMove");
 
+        if (!headerBeingResized) return;
+
         const horizontalScrollOffset = document.documentElement.scrollLeft;
         const width = horizontalScrollOffset + e.clientX - headerBeingResized!.offsetLeft;
 
@@ -130,8 +150,21 @@ export default function FolderPage() {
         if (column) {
           column.size = Math.max(min, width) + "px";
         }
+        console.log("]]]]]]]]]]COLUMNS CHANGED", columns);
+        try {
+          // save columns data to localstorage, but only the size property
+          localStorage.setItem("columns", JSON.stringify(columns.map(({ size }) => size)));
+          console.log(
+            "saved to localstorage",
+            columns.map(({ size }) => size)
+          );
+        } catch (error) {
+          console.error("couldnt save to localstorage", error);
+        }
 
-        table.style.gridTemplateColumns = columns.map(({ size }) => size).join(" ");
+        const CONSTRUCTED_STYLE_STRING = columns.map(({ size }) => size).join(" ");
+        console.log("CONSTRUCTED_STYLE_STRING", CONSTRUCTED_STYLE_STRING);
+        table.style.gridTemplateColumns = CONSTRUCTED_STYLE_STRING;
       });
 
     const onMouseUp = () => {
@@ -156,12 +189,18 @@ export default function FolderPage() {
       }
     };
 
-    document.querySelectorAll("th").forEach((header) => {
+    // GRAB COLUMNS FROM DOM
+    document.querySelectorAll("th").forEach((header, index) => {
+      console.log("==========header", header, index);
       const max = columnTypeToRatioMap[header.dataset.type as string] + "fr";
       columns.push({
         header,
-        size: `minmax(${min}px, ${max})`,
+        size: localColumnData[index] || `minmax(${min}px, ${max})`,
       });
+      console.log("==========columns", columns);
+      table.style.gridTemplateColumns = columns.map(({ size }) => size).join(" ");
+      setIsLoading(false);
+
       const resizeHandle = header.querySelector(".resize-handle") as HTMLElement;
       resizeHandle.addEventListener("mousedown", initResize);
     });
@@ -185,8 +224,6 @@ export default function FolderPage() {
     document.querySelectorAll("td button span").forEach((link) => {
       link.addEventListener("mousedown", setLastFocusedLink);
     });
-
-    // ===== GRAB CURRENTLY SELECTED LINK
 
     // Clean up event listeners in the return function
     return () => {
@@ -230,15 +267,23 @@ export default function FolderPage() {
     }
   });
 
+  console.log("IS LOADING: ", isLoading);
+
   return (
     <>
-      <table className={`${styles.table} table`}>
+      {isLoading && <Loader />}
+      <table
+        className={`${styles.table} table`}
+        style={{
+          ...(isLoading && { display: "none" }),
+        }}
+      >
         <thead>
           <tr>
-            <th data-type="numeric">
+            <th data-type="text-long">
               Name <span className={`resize-handle ${styles["resize-handle"]}`}></span>
             </th>
-            <th data-type="text-short">
+            <th data-type="numeric">
               Size <span className={`resize-handle ${styles["resize-handle"]}`}></span>
             </th>
             <th data-type="text-short">

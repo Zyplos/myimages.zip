@@ -5,12 +5,15 @@
   border-collapse: collapse;
   min-width: 100%;
   /* These are just initial values which are overriden using JavaScript when a column is resized */
-  grid-template-columns: minmax(150px, 2fr) minmax(150px, 1fr) minmax(150px, 1.67fr) minmax(150px, 1.67fr);
+  grid-template-columns: minmax(150px, 3.33fr) minmax(150px, 1fr) minmax(150px, 1.67fr) minmax(150px, 1.67fr);
   font-size: 0.9rem;
 
   position: relative;
 
   margin-bottom: 0.5rem;
+
+  max-height: 100%;
+  overflow: auto;
 }
 
 .table thead {
@@ -30,7 +33,7 @@
   padding-left: 0.6rem;
   // padding-bottom: 0.2rem;
   overflow: hidden;
-  text-overflow: ellipsis;
+  // text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -100,6 +103,13 @@
 
   // display: flex;
   // gap: 0.2rem;
+
+  max-width: -webkit-fill-available;
+  overflow: hidden;
+  /* width: 69px; */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
   margin-left: 0.1rem;
 
   & span {
@@ -107,9 +117,11 @@
     padding: 0 0.1rem;
   }
 
-  &:focus span {
-    background-color: #0078d7;
-    color: #fff;
+  &:focus {
+    color: #fff !important;
+    & span {
+      background-color: #0078d7;
+    }
   }
 }
 
