@@ -52,6 +52,8 @@
   align-items: center;
   margin-left: 1px;
 
+  overflow: hidden;
+
   &:hover {
     border: 1px solid #0078d7;
 
@@ -69,6 +71,7 @@
 
 .breadcrumbs-list {
   display: flex;
+  overflow: auto;
 }
 
 .breadcrumbs-list > a {
