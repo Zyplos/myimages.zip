@@ -32,7 +32,7 @@ export default function Breadcrumbs() {
   return (
     <div className={styles["breadcrumbs-wrapper"]}>
       <div className={styles["up-button-wrapper"]}>
-        <Link className={styles["up-button"]} href={"/" + upLevelLink}>
+        <Link className={`${styles["up-button"]} ${isIndex ? styles["root-button"] : ""}`} href={"/" + upLevelLink}>
           <Image src="/images/icons/levelup-icon.svg" width="18" height="18" alt="Test Icon" />
         </Link>
       </div>

@@ -30,6 +30,15 @@
     background: #e5f3ff;
   }
 
+  &.root-button {
+    filter: grayscale(100%);
+    &:hover {
+      cursor: default;
+      border: 1px solid transparent;
+      background: none;
+    }
+  }
+
   // https://stackoverflow.com/questions/5804256/image-inside-div-has-extra-space-below-the-image
   & > img {
     display: block;
